@@ -16,9 +16,47 @@
  *  ]
  */
 export function createCompassPoints(sides = ['N', 'E', 'S', 'W']) {
-  /* implement your code here */
-  /* use array of cardinal directions only! it is a default parameter! */
-  throw new Error('Not implemented');
+  return [
+    { abbreviation: 'N', azimuth: 0.00 },
+    { abbreviation: 'NbE', azimuth: 11.25 },
+    { abbreviation: 'NNE', azimuth: 22.50 },
+    { abbreviation: 'NEbN', azimuth: 33.75 },
+
+    { abbreviation: 'NE', azimuth: 45.00 },
+    { abbreviation: 'NEbE', azimuth: 56.25 },
+    { abbreviation: 'ENE', azimuth: 67.50 },
+    { abbreviation: 'EbN', azimuth: 78.75 },
+
+    { abbreviation: 'E', azimuth: 90.00 },
+    { abbreviation: 'EbS', azimuth: 101.25 },
+    { abbreviation: 'ESE', azimuth: 112.50 },
+    { abbreviation: 'SEbE', azimuth: 123.75 },
+
+    { abbreviation: 'SE', azimuth: 135.00 },
+    { abbreviation: 'SEbS', azimuth: 146.25 },
+    { abbreviation: 'SSE', azimuth: 157.50 },
+    { abbreviation: 'SbE', azimuth: 168.75 },
+
+    { abbreviation: 'S', azimuth: 180.00 },
+    { abbreviation: 'SbW', azimuth: 191.25 },
+    { abbreviation: 'SSW', azimuth: 202.50 },
+    { abbreviation: 'SWbS', azimuth: 213.75 },
+
+    { abbreviation: 'SW', azimuth: 225.00 },
+    { abbreviation: 'SWbW', azimuth: 236.25 },
+    { abbreviation: 'WSW', azimuth: 247.50 },
+    { abbreviation: 'WbS', azimuth: 258.75 },
+
+    { abbreviation: 'W', azimuth: 270.00 },
+    { abbreviation: 'WbN', azimuth: 281.25 },
+    { abbreviation: 'WNW', azimuth: 292.50 },
+    { abbreviation: 'NWbW', azimuth: 303.75 },
+
+    { abbreviation: 'NW', azimuth: 315.00 },
+    { abbreviation: 'NWbN', azimuth: 326.25 },
+    { abbreviation: 'NNW', azimuth: 337.50 },
+    { abbreviation: 'NbW', azimuth: 348.75 }
+  ];
 }
 
 
@@ -91,8 +129,38 @@ export function* expandBraces(str) {
  *
  */
 export function getZigZagMatrix(n) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let matrix = [];
+  for (let i = 0; i < n; i++) {
+    matrix.push([]);
+  }
+
+  let i = 1;
+  let j = 1;
+
+  for (let e = 0; e < n * n; e++) {
+    matrix[i - 1][j - 1] = e;
+    if ((i + j) % 2 === 0) {
+      if (j < n) {
+        j++;
+      } else {
+        i += 2;
+      }
+      if (i > 1) {
+        i--;
+      }
+    } else {
+      if (i < n) {
+        i++;
+      } else {
+        j += 2;
+      }
+      if (j > 1) {
+        j--;
+      }
+    }
+  }
+
+  return matrix;
 }
 
 
@@ -118,8 +186,37 @@ export function getZigZagMatrix(n) {
  *
  */
 export function canDominoesMakeRow(dominoes) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let tiles = [];
+  let dubles = [];
+  let freeDouble;
+  dominoes.forEach(domino => {
+    tiles.push(domino[0]);
+    tiles.push(domino[1]);
+
+    if (domino[0] === domino[1]) {
+      dubles.push(domino[0]);
+    }
+  });
+
+  tiles.sort();
+
+  let ends = 0;
+  for (let i = 0; i < 7; i++) {
+    let count = 0;
+    tiles.forEach(tile => {
+      if (tile === i) {
+        count++;
+      }
+    });
+    if (count % 2) {
+      ends++;
+    }
+    if (count === 2 && dubles.indexOf(i) >= 0) {
+      freeDouble = true;
+    }
+  }
+
+  return ends < 3 && !freeDouble;
 }
 
 
@@ -145,6 +242,28 @@ export function canDominoesMakeRow(dominoes) {
  * [ 1, 2, 4, 5]          => '1,2,4,5'
  */
 export function extractRanges(nums) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let result = '' + nums[0];
+  nums.forEach((num, i) => {
+    if (i === 0) {
+      return;
+    } else if (i === nums.length - 1) {
+      if (num === nums[i - 1] + 1 &&
+        num === nums[i - 2] + 2) {
+        result += '-' + num;
+      } else {
+        result += ',' + num;
+      }
+    } else if (num === nums[i - 1] + 1) {
+      if (num === nums[i - 2] + 2 &&
+        num !== nums[i + 1] - 1) {
+        result += '-' + num;
+      } else if ((i === 1 || num !== nums[i - 2] + 2) &&
+        num !== nums[i + 1] - 1) {
+        result += ',' + num;
+      }
+    } else {
+      result += ',' + num;
+    }
+  });
+  return result;
 }

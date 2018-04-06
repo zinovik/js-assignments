@@ -12,8 +12,14 @@
  *   'abcdefghijklmnop',  'lmnopqrstuvwxyz'  => 'abcdefghijklmnopqrstuvwxyz'
  */
 export function distinctLettersString(value1, value2) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let arr = `${value1}${value2}`.split('').sort();
+  let lastValue;
+  arr = arr.filter(value => {
+    let lValue = lastValue;
+    lastValue = value;
+    return value !== lValue;
+  });
+  return arr.join('');
 }
 
 
@@ -30,8 +36,14 @@ export function distinctLettersString(value1, value2) {
  */
 
 export function lowerLetters(value) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let arr = value.split('');
+  let result = {};
+  arr.forEach(value => {
+    if (value >= 'a' && value <= 'z') {
+      result[value] = result[value] ? result[value] + 1 : 1;
+    }
+  });
+  return result;
 }
 
 /**
@@ -53,8 +65,21 @@ export function lowerLetters(value) {
  */
 
 export function titleCaseConvert(title, minorWords) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let titleArr = title.split(' ');
+  let minorArr = minorWords ? minorWords.split(' ') : [];
+  minorArr = minorArr.map(word => {
+    return word.toLowerCase();
+  });
+  titleArr = titleArr.map(word => {
+    let wordNew = word.toLowerCase();
+    if (minorArr.indexOf(wordNew) > -1) {
+      return wordNew;
+    }
+    return wordNew[0].toUpperCase() + wordNew.substring(1, wordNew.length);
+  });
+  let titleNew = titleArr.join(' ');
+  titleNew = titleNew[0].toUpperCase() + titleNew.substring(1, titleNew.length);
+  return titleNew;
 }
 
 /**
@@ -75,6 +100,24 @@ export function titleCaseConvert(title, minorWords) {
  */
 
 export function calcRPN(expr) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  if (!expr) {
+    return 0;
+  }
+
+  let arr = expr.split(' ');
+  let res = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    let element = arr[i];
+
+    if (isNaN(element)) {
+      let n2 = res.pop();
+      let n1 = res.pop();
+      res.push(eval(n1 + element + n2));
+    } else {
+      res.push(element);
+    }
+  }
+
+  return res.pop();
 }

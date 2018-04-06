@@ -37,7 +37,49 @@
  */
 export function parseBankAccount(bankAccount) {
   /* implement your code here */
-  throw new Error('Not implemented');
+  // throw new Error('Not implemented');
+  let nums = [
+    ' _ \n' +
+    '| |\n' +
+    '|_|',
+    '   \n' +
+    '  |\n' +
+    '  |',
+    ' _ \n' +
+    ' _|\n' +
+    '|_ ',
+    ' _ \n' +
+    ' _|\n' +
+    ' _|',
+    '   \n' +
+    '|_|\n' +
+    '  |',
+    ' _ \n' +
+    '|_ \n' +
+    ' _|',
+    ' _ \n' +
+    '|_ \n' +
+    '|_|',
+    ' _ \n' +
+    '  |\n' +
+    '  |',
+    ' _ \n' + 
+    '|_|\n' +
+    '|_|',
+    ' _ \n' +
+    '|_|\n' +
+    ' _|'
+  ];
+  let strings = bankAccount.split('\n');
+  let result = '';
+  for (let i = 0; i < strings[0].length / 3; i++) {
+    let part1 = strings[0].substring(i * 3, i * 3 + 3);
+    let part2 = strings[1].substring(i * 3, i * 3 + 3);
+    let part3 = strings[2].substring(i * 3, i * 3 + 3);
+    let num = `${part1}\n${part2}\n${part3}`;
+    result += nums.indexOf(num);
+  }
+  return +result;
 }
 
 
@@ -69,8 +111,23 @@ export function parseBankAccount(bankAccount) {
  *      'characters.'
  */
 export function* wrapText(text, columns) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let words = text.split(' ');
+  let size = 0;
+  while (words.length > 0) {
+    for (let i = 0; i < words.length; i++) {
+      size += words[i].length + 1;
+      if (size - 1 > columns) {
+        let str = words.splice(0, i || 1);
+        yield str.join(' ');
+        size = 0;
+        break;
+      }
+      if (i === words.length - 1) {
+        yield words.join(' ');
+        words = [];
+      }
+    }
+  }
 }
 
 
@@ -107,8 +164,75 @@ export const PokerRank = {
 };
 
 export function getPokerHandRank(hand) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let allSuits = ['♣', '♦', '♥', '♠'];
+  let allRanks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+
+  hand = hand.map(value => {
+    return {
+      suit: allSuits.indexOf(value[value.length - 1]),
+      rank: allRanks.indexOf(value.slice(0, value.length - 1))
+    };
+  });
+
+  hand.sort((a, b) => {
+    return a.rank > b.rank;
+  });
+
+  let flush = true;
+  let lastSuit = hand && hand[0] && hand[0].suit;
+
+  let straight = true;
+  let lastRank = hand && hand[0] && hand[0].rank;
+
+  let matches = [];
+  let lastMatchCount = 1;
+
+  hand.forEach((value, index) => {
+    if (index === 0) {
+      return;
+    }
+
+    if (value.suit !== lastSuit) {
+      flush = false;
+    }
+    
+    if (value.rank - lastRank !== 1 && (value.rank !== 9 || lastRank !== 0)) {
+      straight = false;
+    }
+
+    if (value.rank === lastRank) {
+      lastMatchCount++;
+    }
+
+    if (value.rank !== lastRank || index === 4) {
+      if (lastMatchCount > 1) {
+        matches.push(lastMatchCount);
+      }
+      lastMatchCount = 1;
+    }
+
+    lastRank = value.rank;
+  });
+
+  if (straight && flush) {
+    return PokerRank.StraightFlush;
+  } else if (matches[0] === 4) {
+    return PokerRank.FourOfKind;
+  } else if (matches[0] + matches[1] === 5) {
+    return PokerRank.FullHouse;
+  } else if (flush) {
+    return PokerRank.Flush;
+  } else if (straight) {
+    return PokerRank.Straight;
+  } else if (matches[0] === 3) {
+    return PokerRank.ThreeOfKind;
+  } else if (matches[0] + matches[1] === 4) {
+    return PokerRank.TwoPairs;
+  } else if (matches[0] === 2) {
+    return PokerRank.OnePair;
+  }
+
+  return PokerRank.HighCard; 
 }
 
 

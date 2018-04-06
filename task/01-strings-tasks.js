@@ -20,8 +20,7 @@
  *   '',  'bb'  => 'bb'
  */
 export function concatenateStrings(value1, value2) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  return `${value1 || ''}${value2 || ''}`;
 }
 
 /**
@@ -36,8 +35,7 @@ export function concatenateStrings(value1, value2) {
  *   ''      => 0
  */
 export function getStringLength(value) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  return value ? value.length : '';
 }
 
 /**
@@ -54,8 +52,7 @@ export function getStringLength(value) {
  *   'Chuck','Norris'  => 'Hello, Chuck Norris!'
  */
 export function getStringFromTemplate(firstName, lastName) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  return `Hello${(firstName || lastName ? ', ' : '')}${firstName || ''}${(firstName && lastName) ? ' ' : ''}${lastName || ''}!`;
 }
 
 /**
@@ -68,9 +65,10 @@ export function getStringFromTemplate(firstName, lastName) {
  *   'Hello, John Doe!' => 'John Doe'
  *   'Hello, Chuck Norris!' => 'Chuck Norris'
  */
-export function  extractNameFromTemplate(value) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+export function extractNameFromTemplate(value) {
+  let nameStart = value.indexOf(', ') + 2;
+  let nameEnd = value.length - 1;
+  return (nameStart !== -1) ? value.slice(nameStart, nameEnd) : '';
 }
 
 
@@ -85,8 +83,7 @@ export function  extractNameFromTemplate(value) {
  *   'cat'       => 'c'
  */
 export function getFirstChar(value) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  return value ? value.charAt(0) : '';
 }
 
 /**
@@ -101,8 +98,7 @@ export function getFirstChar(value) {
  *   '\tHello, World! ' => 'Hello, World!'
  */
 export function removeLeadingAndTrailingWhitespaces(value) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  return value ? value.trim() : '';
 }
 
 /**
@@ -117,8 +113,7 @@ export function removeLeadingAndTrailingWhitespaces(value) {
  *   'cat', 3 => 'catcatcat'
  */
 export function repeatString(value, count) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  return (value && count) ? value.repeat(count) : '';
 }
 
 /**
@@ -133,9 +128,8 @@ export function repeatString(value, count) {
  *   'I like legends', 'end' => 'I like legs',
  *   'ABABAB','BA' => 'ABAB'
  */
-export function removeFirstOccurrences(str, value)  {
-  /* implement your code here */
-  throw new Error('Not implemented');
+export function removeFirstOccurrences(str, value) {
+  return str ? str.replace(value, '') : '';
 }
 
 /**
@@ -150,8 +144,13 @@ export function removeFirstOccurrences(str, value)  {
  *   '<a>' => 'a'
  */
 export function unbracketTag(str) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  if (!str) return '';
+  let first = str.indexOf('<');
+  let last = str.lastIndexOf('>');
+  let startPart = first !== -1 ? str.slice(0, first) : '';
+  let middlePart = last !== -1 ? str.slice(first + 1, last) : str.slice(first + 1, str.length);
+  let endPart = last !== -1 ? str.slice(last + 1, str.length) : '';
+  return `${startPart}${middlePart}${endPart}`;
 }
 
 
@@ -166,8 +165,7 @@ export function unbracketTag(str) {
  *  'abcdefghijklmnopqrstuvwxyz' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
  */
 export function convertToUpperCase(str) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  return str ? str.toUpperCase() : '';
 }
 
 /**
@@ -182,8 +180,7 @@ export function convertToUpperCase(str) {
  *   'info@gmail.com' => ['info@gmail.com']
  */
 export function extractEmails(str) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  return str ? str.split(';') : [];
 }
 
 /**
@@ -210,8 +207,11 @@ export function extractEmails(str) {
  *
  */
 export function getRectangleString(width, height) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  if (!width || !height || width < 2 || height < 2) return '\n';
+  let firstString = `┌${'─'.repeat(width - 2)}┐\n`;
+  let middleString = `│${' '.repeat(width - 2)}│\n`;
+  let lastString = `└${'─'.repeat(width - 2)}┘\n`;
+  return `${firstString}${middleString.repeat(height - 2)}${lastString}`;
 }
 
 
@@ -232,8 +232,28 @@ export function getRectangleString(width, height) {
  *
  */
 export function encodeToRot13(str) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  if (!str) return '';
+
+  const firstUpper = 65;
+  const lowerShift = 32;
+
+  let newStr = '';
+  for (let i = 0; i < str.length; i++) {
+    let charCode = str.charCodeAt(i);
+    if ((charCode >= firstUpper &&
+      charCode < firstUpper + 13) ||
+      (charCode >= firstUpper + lowerShift &&
+        charCode < firstUpper + 13 + lowerShift)) {
+      charCode += 13;
+    } else if ((charCode >= firstUpper + 13 &&
+      charCode - 13 <= firstUpper + 13) ||
+      (charCode >= firstUpper + 13 + lowerShift &&
+        charCode - 13 <= firstUpper + 13 + lowerShift)) {
+      charCode -= 13;
+    }
+    newStr += String.fromCharCode(charCode);
+  }
+  return newStr;
 }
 
 /**
@@ -250,8 +270,7 @@ export function encodeToRot13(str) {
  *   isString(new String('test')) => true
  */
 export function isString(value) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  return typeof value === 'string' || value instanceof String;
 }
 
 
@@ -280,6 +299,11 @@ export function isString(value) {
  *   'K♠' => 51
  */
 export function getCardId(value) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  if (!value) return '';
+  let suits = ['♣', '♦', '♥', '♠'];
+  let ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+  let suit = suits.indexOf(value[value.length - 1]);
+  let rank = ranks.indexOf(value.slice(0, value.length - 1));
+  if ((!suit && suit !== 0) || (!rank && rank !== 0)) return;
+  return suit * 13 + rank;
 }

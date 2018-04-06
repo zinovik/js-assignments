@@ -28,8 +28,51 @@
  *   'NULL'      => false
  */
 export function findStringInSnakingPuzzle(puzzle, searchStr) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  for (let x = 0; x < puzzle[0].length; x++) {
+    for (let y = 0; y < puzzle.length; y++) {
+      if (puzzle[y][x] === searchStr[0]) {
+
+        let used = [];
+        for (let i = 0; i < puzzle.length; i++) {
+          used[i] = [];
+        }
+
+        let curX = x;
+        let curY = y;
+        used[curY][curX] = true;
+
+        for (let i = 1; i < searchStr.length; i++) {
+          
+          let foundNext;
+          if (curX < puzzle[0].length - 1 && !used[curY][curX + 1] && searchStr[i] === puzzle[curY][curX + 1]) {
+            curX++;
+            foundNext = true;
+          } else if (curX > 0 && !used[curY][curX - 1] && searchStr[i] === puzzle[curY][curX - 1]) {
+            curX--;
+            foundNext = true;
+          } else if (curY < puzzle.length - 1 && !used[curY + 1][curX] && searchStr[i] === puzzle[curY + 1][curX]) {
+            curY++;
+            foundNext = true;
+          } else if (curY > 0 && !used[curY - 1][curX] && searchStr[i] === puzzle[curY - 1][curX]) {
+            curY--;
+            foundNext = true;
+          }
+
+          if (foundNext) {
+            used[curY][curX] = true;
+          } else {
+            break;
+          }
+
+          if (i === searchStr.length - 1) {
+            return true;
+          }
+
+        }
+      }
+    }
+  }
+  return false;
 }
 
 
@@ -47,8 +90,35 @@ export function findStringInSnakingPuzzle(puzzle, searchStr) {
  *    'abc' => 'abc','acb','bac','bca','cab','cba'
  */
 export function* getPermutations(chars) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let counter = [];
+  let result = [];
+  result.push(chars);
+  let arr = chars.split('');
+
+  function swap(arr, i, j) {
+    let tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
+
+  for (let i = 0; i < arr.length; i++) {
+    counter[i] = 0;
+  }
+
+  let i = 0;
+  while (i < arr.length) {
+    if (counter[i] < i) {
+      swap(arr, i % 2 ? counter[i] : 0, i);
+      counter[i]++;
+      i = 0;
+      result.push(arr.join(''));
+    } else {
+      counter[i] = 0;
+      i++;
+    }
+  }
+
+  yield* result;
 }
 
 
@@ -70,8 +140,26 @@ export function* getPermutations(chars) {
  *    [ 1, 6, 5, 10, 8, 7 ] => 18  (buy at 1,6,5 and sell all at 10)
  */
 export function getMostProfitFromStockQuotes(quotes) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let balance = 0;
+  let count = 0;
+
+  for (let i = 0; i < quotes.length; i++) {
+
+    let max = quotes[i];
+    for (let j = i; j < quotes.length; j++) {
+      max = Math.max(quotes[j], max);
+    }
+
+    if (quotes[i] === max) {
+      balance += quotes[i] * count;
+      count = 0;
+    } else {
+      balance -= quotes[i];
+      count++;
+    }
+  }
+
+  return balance;
 }
 
 
@@ -91,8 +179,8 @@ export function getMostProfitFromStockQuotes(quotes) {
  */
 export function UrlShortener() {
   this.urlAllowedChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' +
-                          'abcdefghijklmnopqrstuvwxyz' +
-                          "0123456789-_.~!*'();:@&=+$,/?#[]";
+    'abcdefghijklmnopqrstuvwxyz' +
+    "0123456789-_.~!*'();:@&=+$,/?#[]";
 }
 
 UrlShortener.prototype = {

@@ -27,12 +27,24 @@
  * NOTE: Please try to complete this task faster then original song finished:
  * https://www.youtube.com/watch?v=Z7bmyjxJuVY   :)
  *
- *
+ *т
  * @return {Iterable.<string>}
  *
  */
 export function* get99BottlesOfBeer() {
-  throw new Error('Not implemented');
+  let i = 99;
+  yield `${i} bottles of beer on the wall, ${i} bottles of beer.`;
+  i--;
+  while (i > 1) {
+    yield `Take one down and pass it around, ${i} bottles of beer on the wall.`;
+    yield `${i} bottles of beer on the wall, ${i} bottles of beer.`;
+    i--;
+  }
+  yield `Take one down and pass it around, 1 bottle of beer on the wall.`;
+  yield `1 bottle of beer on the wall, 1 bottle of beer.`;
+  yield `Take one down and pass it around, no more bottles of beer on the wall.`;
+  yield `No more bottles of beer on the wall, no more bottles of beer.`;
+  yield `Go to the store and buy some more, 99 bottles of beer on the wall.`;
 }
 
 
@@ -46,7 +58,17 @@ export function* get99BottlesOfBeer() {
  *
  */
 export function* getFibonacciSequence() {
-  throw new Error('Not implemented');
+  yield 0;
+  yield 1;
+  let x2 = 0;
+  let x1 = 1;
+  let x0;
+  while (true) {
+    x0 = x1 + x2;
+    yield x0;
+    x2 = x1;
+    x1 = x0;
+  }
 }
 
 
@@ -81,7 +103,31 @@ export function* getFibonacciSequence() {
  *
  */
 export function* depthTraversalTree(root) {
-  throw new Error('Not implemented');
+  yield root;
+
+  let children = [];
+
+  if (root.children) {
+    root.children.reverse();
+    root.children.forEach(child => {
+      children.push(child);
+    });
+  }
+
+  while (children.length) {
+    let child = children.pop();
+  
+    yield child;
+
+    if (child.children) {
+      child.children.reverse();
+      child.children.forEach(child => {
+        children.push(child);
+      });
+    }
+  }
+
+  return;
 }
 
 
@@ -107,7 +153,21 @@ export function* depthTraversalTree(root) {
  *
  */
 export function* breadthTraversalTree(root) {
-  throw new Error('Not implemented');
+  const nodes = [];
+  nodes.push(root);
+
+  let i = 0;
+
+  while (nodes.length > i) {
+    if (nodes[i].children) {
+      nodes[i].children.forEach(child => {
+        nodes.push(child);
+      });
+    }
+    i++;
+  }
+
+  yield* nodes;
 }
 
 
@@ -125,5 +185,26 @@ export function* breadthTraversalTree(root) {
  *   [ 1, 3, 5, ... ], [ -1 ] => [ -1, 1, 3, 5, ...]
  */
 export function* mergeSortedSequences(source1, source2) {
-  throw new Error('Not implemented');
+  let it1 = source1();
+  let it2 = source2();
+
+  let done = false;
+
+  while (done !== true) {
+    let next1 = it1.next();
+    let next2 = it2.next();
+    done = next1.done && next2.done;
+    if (!done) {
+      if ((next1.value || next1.value === 0) && (next2.value || next2.value === 0)) {
+        yield Math.min(next1.value, next2.value);
+        yield Math.max(next1.value, next2.value);
+      } else {
+        if (next1.value || next1.value === 0) {
+          yield next1.value;
+        } else if (next2.value || next2.value === 0) {
+          yield next2.value;
+        }
+      }
+    }
+  }
 }

@@ -21,8 +21,7 @@
  *    'Sun, 17 May 1998 03:00:00 GMT+01' => Date()
  */
 export function parseDataFromRfc2822(value) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  return new Date(value);
 }
 
 /**
@@ -37,8 +36,7 @@ export function parseDataFromRfc2822(value) {
  *    '2016-01-19T08:07:37Z' => Date()
  */
 export function parseDataFromIso8601(value) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  return new Date(value);
 }
 
 
@@ -57,8 +55,16 @@ export function parseDataFromIso8601(value) {
  *    Date(2015,1,1)    => false
  */
 export function isLeapYear(date) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let year = date.getYear();
+  if (year % 4 !== 0) {
+    return false;
+  } else if (year % 100 !== 0) {
+    return true;
+  } else if (year % 400 !== 0) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 
@@ -78,8 +84,33 @@ export function isLeapYear(date) {
  *    Date(2000,1,1,10,0,0),  Date(2000,1,1,15,20,10,453)   => "05:20:10.453"
  */
 export function timeSpanToString(startDate, endDate) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let remain = endDate - startDate;
+  let HH = Math.floor(remain / 3600000);
+  if (HH < 10) {
+    HH = '0' + HH;
+  }
+
+  remain -= HH * 3600000;
+  let mm = Math.floor(remain / 60000);
+  if (mm < 10) {
+    mm = '0' + mm;
+  }
+
+  remain -= mm * 60000;
+  let ss = Math.floor(remain / 1000);
+  if (ss < 10) {
+    ss = '0' + ss;
+  }
+
+  remain -= ss * 1000;
+  let sss = remain;
+  if (sss < 10) {
+    sss = '00' + sss;
+  } else if (sss < 100) {
+    sss = '0' + sss;
+  }
+
+  return `${HH}:${mm}:${ss}.${sss}`;
 }
 
 
@@ -98,6 +129,8 @@ export function timeSpanToString(startDate, endDate) {
  *    Date.UTC(2016,3,5,21, 0) => Math.PI/2
  */
 export function angleBetweenClockHands(date) {
-  /* implement your code here */
-  throw new Error('Not implemented');
+  let hUTC12 = date.getUTCHours() >= 12 ? date.getUTCHours() - 12 : date.getUTCHours();
+  let hPerc = (hUTC12 * 60 + date.getUTCMinutes());
+  let diffPerc = Math.abs(hPerc - date.getUTCMinutes() * 12);
+  return Math.PI * (diffPerc > 360 ? 720 - diffPerc : diffPerc) / 360;
 }
